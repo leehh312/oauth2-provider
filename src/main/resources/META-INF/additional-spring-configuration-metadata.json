@@ -1,0 +1,82 @@
+{"properties": [
+  {
+    "name": "idp.api.version",
+    "type": "java.lang.String",
+    "description": "A description for 'idp.api.version'"
+  },
+  {
+    "name": "idp.oauth2.pfx.path",
+    "type": "java.lang.String",
+    "description": "A description for 'idp.oauth2.pfx.path'"
+  },
+  {
+    "name": "idp.oauth2.pfx.alias",
+    "type": "java.lang.String",
+    "description": "A description for 'idp.oauth2.pfx.alias'"
+  },
+  {
+    "name": "idp.oauth2.pfx.password",
+    "type": "java.lang.String",
+    "description": "A description for 'idp.oauth2.pfx.password'"
+  },
+  {
+    "name": "spring.security.ouath2.token.expire.time",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.security.ouath2.token.expire.time'"
+  },
+  {
+    "name": "include.error.message.detail",
+    "type": "java.lang.String",
+    "description": "A description for 'include.error.message.detail'"
+  },
+  {
+    "name": "idp.oauth2.provider.url",
+    "type": "java.lang.String",
+    "description": "A description for 'idp.oauth2.provider.url'"
+  },
+  {
+    "name": "idp.include.error.message-detail",
+    "type": "java.lang.String",
+    "description": "A description for 'idp.include.error.message-detail'"
+  },
+  {
+    "name": "idp.password",
+    "type": "java.lang.String",
+    "description": "A description for 'idp.password'"
+  },
+  {
+    "name": "idp.pfx.path",
+    "type": "java.lang.String",
+    "description": "A description for 'idp.pfx.path'"
+  },
+  {
+    "name": "idp.pfx.alias",
+    "type": "java.lang.String",
+    "description": "A description for 'idp.pfx.alias'"
+  },
+  {
+    "name": "idp.oauth2.provider-url",
+    "type": "java.lang.String",
+    "description": "A description for 'idp.oauth2.provider-url'"
+  },
+  {
+    "name": "idp.pfx.password",
+    "type": "java.lang.String",
+    "description": "A description for 'idp.pfx.password'"
+  },
+  {
+    "name": "idp.oauth2.token.ttl",
+    "type": "java.lang.String",
+    "description": "A description for 'idp.oauth2.token.ttl'"
+  },
+  {
+    "name": "idp.oauth2.remember.key-name",
+    "type": "java.lang.String",
+    "description": "A description for 'idp.oauth2.remember.key-name'"
+  },
+  {
+    "name": "idp.oauth2.login.remaining-count",
+    "type": "java.lang.String",
+    "description": "A description for 'idp.oauth2.login.remaining-count'"
+  }
+]}

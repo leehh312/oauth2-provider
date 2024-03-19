@@ -1,0 +1,94 @@
+server:
+  port: 9705
+  servlet:
+    session:
+      cookie:
+        # strict mode: Same Site에서의 요청만 쿠키의 전송을 허용하며 가장 완벽하지만 편의성 떨어짐
+        # lax mode: 기본적으로는 strict이지만 cross site에서의 요청이라도 safe한 요청인 http get, href, link를 통한 접근은 허용 strict모드의 보완 된 모드
+        # none: same site 및 cross site 모두 허용하지만 보안에 취약하여 되도록이면 지양하며 만약 none설정 시에는 반드시 https 프로토콜 하에서 secure속성과 함께 사용
+        same-site: lax
+        secure: true
+  error:
+    # 응답에 exception의 내용을 포함할지 여부
+    include-exception: true
+    # 응답에 stacktrace 내용을 포함할지 여부
+    include-stacktrace: never
+    whitelabel:
+      enabled: false
+  forward-headers-strategy: native
+  tomcat:
+    redirect-context-root: false
+
+spring:
+  application:
+    name: idp
+  thymeleaf:
+    cache: false
+  datasource:
+    url: jdbc:mysql://localhost:3306/idp
+    username: root
+    password: test1234
+    driver-class-name: com.mysql.jdbc.Driver
+  sql:
+    init:
+      mode: always
+      platform: mysql
+      schema-locations:
+      - classpath:databases/mysql/oauth2-schema.sql
+      encoding: UTF-8
+  jpa:
+    show-sql: true
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: true
+            required: true
+          auth: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+  security:
+    oauth2:
+      client:
+        registration:
+          google-idp:
+            provider: google
+            client-id: 289397658719-e5cljlj6b47mhfnegcsr0eujo49vk1mg.apps.googleusercontent.com
+            client-secret: ${OAUTH_CLIENT_SECRET}
+            authorization-grant-type: authorization_code
+            scope: openid, https://www.googleapis.com/auth/userinfo.profile, https://www.googleapis.com/auth/userinfo.email
+            client-name: uralce-idp
+        provider:
+          google:
+            user-name-attribute: email
+
+
+idp:
+  oauth2:
+    login:
+      # 로그인 실패 시 횟수
+      remaining-count: 5
+    # security remember-me parameter & cookiename 키명 설정
+    remember:
+      key-name: remember
+    token:
+      # access 토큰 유효 시간 설정 -> seccond value setting
+      ttl: 0
+    provider-url: http://localhost:9705
+    pfx:
+      # jwt 생성 시 사용할 인증서
+      path: oauth2/jwt/oauth2.pfx
+      # 인증서 별명
+      alias: oauth2
+      # 인증서 비밀번호
+      password: uracle2022!@
+  # 추 후 삭제할 옵션
+  include:
+    error:
+      message-detail: true

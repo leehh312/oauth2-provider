@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="60 seconds">
+	<!-- 변수 지정 -->
+
+    <property name="localMode" value="local" />				<!-- 로컬 설정 -->
+    <property name="devMode" value="dev" />					<!-- 개발 설정 여부 -->
+    <property name="realMode" value="real" />				<!-- 운영 설정 -->
+    <property name="logMode" value="${localMode}" />			<!-- 로컬 모드 설정 -->
+
+    <!-- 기본 로그 설정 -->
+    <property name="localLogDir" value="/Users/uracle/log/idpAPI" />					<!-- 로컬 로그 폴더 설정( 로컬 테스트시 해당 value의 값을 로컬 환경에 맞게 수정 ) -->
+    <property name="devLogDir" value="/Users/uracle/log/idpAPI" />							<!-- 서버 로그 폴더 설정( 개발과 운영의 경로가 다를수 있음 ==> 업로드시 반듯이 설정 확인 ) -->
+    <property name="realLogDir" value="/Users/uracle/log/idpAPI" />							<!-- 서버 로그 폴더 설정( 개발과 운영의 경로가 다를수 있음 ==> 업로드시 반듯이 설정 확인 ) -->
+    <property name="defaultLogFileName" value="/idpAPI.log" />								<!-- 로그 파일명 -->
+    <property name="defaultRollingLogFileName" value="/%d{yyyy-MM-dd}idpAPI.log" />		<!-- 롤링 로그 파일명 -->
+
+	<!-- 기본 로그 파일 설정 -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    	<file>
+		    <if condition='"${logMode}" == "${localMode}"'>
+		    	<then>${localLogDir}${defaultLogFileName}</then>
+		    </if>
+           	<if condition='"${logMode}" == "${devMode}"'>
+		    	<then>${devLogDir}${defaultLogFileName}</then>
+		    </if>
+           	<if condition='"${logMode}" == "${realMode}"'>
+		    	<then>${realLogDir}${defaultLogFileName}</then>
+		    </if>
+
+    	</file>
+    	<encoder>
+            <pattern>%d{HH:mm:ss} [%thread]%-5level [%class{100}.class] - %msg%n</pattern>
+        </encoder>
+
+    	<!-- 일자별 로그 설정 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>
+            	<if condition='"${logMode}" == "${localMode}"'>
+			    	<then>${localLogDir}${defaultRollingLogFileName}</then>
+			    </if>
+            	<if condition='"${logMode}" == "${devMode}"'>
+			    	<then>${devLogDir}${defaultRollingLogFileName}</then>
+			    </if>
+            	<if condition='"${logMode}" == "${realMode}"'>
+			    	<then>${realLogDir}${defaultRollingLogFileName}</then>
+			    </if>
+            </fileNamePattern>
+            <maxHistory>30</maxHistory>
+            <cleanHistoryOnStart>true</cleanHistoryOnStart>
+        </rollingPolicy>
+    </appender>
+
+	<!-- 콘솔 로그 설정 ( 로컬에서만 사용 ) -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+    	<layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>%d{HH:mm:ss} [%thread]%-5level [%class{100}.class] - %msg%n</pattern>
+        </layout>
+    </appender>
+
+    <root level="DEBUG">
+	    <if condition='"${logMode}" == "${localMode}"'>
+	    	<then>
+	    		<!-- 콘솔 로그 설정 -->
+	    		<appender-ref ref="CONSOLE" />
+		        <!-- 파일로 설정시 -->
+		        <appender-ref ref="FILE" />
+	    	</then>
+	    </if>
+		<if condition='"${logMode}" == "${devMode}"'>
+    	<then>
+    		<!-- 콘솔 로그 설정 -->
+    		<appender-ref ref="CONSOLE" />
+	        <!-- 파일로 설정시 -->
+	        <appender-ref ref="FILE" />
+    	</then>
+	    </if>
+          	<if condition='"${logMode}" == "${realMode}"'>
+	    	<then>
+		        <!-- 파일로 설정시 -->
+		        <appender-ref ref="FILE" />
+	    	</then>
+	    </if>
+    </root>
+</configuration>
+

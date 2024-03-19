@@ -1,0 +1,136 @@
+plugins {
+	id 'org.springframework.boot' version '2.7.2'
+	id 'io.spring.dependency-management' version '1.0.12.RELEASE'
+	id 'java'
+	id 'war'
+}
+
+ext {
+	jdkVersion = "11"
+	encodingFormat = "UTF-8"
+
+	morpheusIdpVersion = "1.0.0"
+
+	thymeleafExtrasVersion = "3.0.4.RELEASE"
+
+	springsecurityVersion = "5.7.2"
+	authorizationserverVersion = "0.3.1"
+
+	h2DataVersion = "2.1.210"
+
+	nimbusdsVersion = "9.14"
+
+	janinoVersion = "3.1.6"
+	logbackVersion = "1.2.10"
+
+	lombokVersion = "1.18.22"
+	powermockVersion = "2.0.9"
+
+	gsonVersion = "2.8.9"
+
+	bouncycastleVersion = "1.68"
+
+	pool2Version = "2.11.1"
+
+	mysqlVersion = "8.0.29"
+
+	javaMail = "1.6.2"
+}
+
+war {
+	archiveBaseName = "oauth2-provider"
+	archiveVersion = "${morpheusIdpVersion}"
+
+	enabled = true
+
+	// Remove `plain` postfix from jar file name
+    archiveClassifier.set("")
+}
+
+bootWar.enabled=false
+
+sourceCompatibility = "${jdkVersion}"
+targetCompatibility = "${jdkVersion}"
+
+[compileJava, compileTestJava]*.options*.encoding = "${encodingFormat}"
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation "org.springframework.boot:spring-boot-starter-web"
+	testImplementation "org.springframework.boot:spring-boot-starter-test"
+	providedRuntime "org.springframework.boot:spring-boot-starter-tomcat"
+	implementation "org.springframework.boot:spring-boot-starter-aop"
+	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+	implementation "org.springframework.boot:spring-boot-starter-security"
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation "org.thymeleaf.extras:thymeleaf-extras-springsecurity5:${thymeleafExtrasVersion}"
+
+	implementation "org.springframework.security:spring-security-oauth2-resource-server:${springsecurityVersion}"
+	implementation "org.springframework.security:spring-security-oauth2-authorization-server:${authorizationserverVersion}"
+
+	runtimeOnly "com.h2database:h2:${h2DataVersion}"
+
+	// jwt
+	implementation "com.nimbusds:nimbus-jose-jwt:${nimbusdsVersion}"
+
+	// log
+	implementation "org.codehaus.janino:janino:${janinoVersion}"
+	implementation "ch.qos.logback:logback-core:${logbackVersion}"
+	testImplementation "ch.qos.logback:logback-classic:${logbackVersion}"
+
+	// lombok
+	compileOnly "org.projectlombok:lombok:${lombokVersion}"
+	annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+
+	testCompileOnly "org.projectlombok:lombok:${lombokVersion}" // 테스트 의존성 추가
+    testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}" // 테스트 의존성 추가
+
+	testImplementation ("org.powermock:powermock-api-mockito2:${powermockVersion}") {
+		exclude group: "org.mockito", module: "mockito-core"
+	}
+	testImplementation "org.powermock:powermock-module-junit4:${powermockVersion}"
+
+	// Gson
+	implementation 'com.google.code.findbugs:jsr305:3.0.2'
+    implementation "com.google.code.gson:gson:${gsonVersion}"
+
+	// Bouncycastle
+    implementation "org.bouncycastle:bcprov-jdk15on:${bouncycastleVersion}"
+
+	// commons pool2
+	implementation "org.apache.commons:commons-pool2:${pool2Version}"
+
+	// db
+	implementation "mysql:mysql-connector-java:${mysqlVersion}"
+
+	// smtp(email)
+	implementation "com.sun.mail:javax.mail:${javaMail}"
+
+	// local sdk dependency
+	implementation fileTree(dir: "libs", include: "*.jar")
+}
+
+// commons-logging, log4j, jul 의존성 제거
+configurations {
+    all.collect { configuration ->
+        configuration.exclude group: "commons-logging", module: "commons-logging"
+        configuration.exclude group: "log4j", module: "log4j"
+        configuration.exclude group: "org.apache.logging.log4j"
+        configuration.exclude group: "org.slf4j", module: "slf4j-log4j12"
+        configuration.exclude group: "org.slf4j", module: "slf4j-jcl"
+        configuration.exclude group: "org.slf4j", module: "slf4j-jdk14"
+    }
+}
+
+tasks.named('test') {
+	// useJUnitPlatform()
+}
